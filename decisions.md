@@ -57,4 +57,40 @@ Date: 2025-05-20
 - Wrote and pushed README.md
 
 Concepts locked: git basics, commits, remotes, README/Markdown
-Next session (A-tier): build the chat UI — /intake/[hostSlug] with hardcoded questions
+
+---
+
+## Session 3 — Chat UI
+Date: 2026-08-21
+
+- Block 2: Chat.tsx client component, wired into page.tsx
+- Block 3: hardcoded messages array, .map() render, useState for input + send
+
+Concepts locked: useState, controlled inputs, client vs server boundary
+
+---
+
+## Session 4 — Persist Messages to Supabase
+Date: 2026-09-15
+
+- Created lib/supabase.ts — browser client via @supabase/ssr's createBrowserClient
+- Chat.tsx addMessage() now inserts { role, content } into the messages table on send (async/await)
+- id, created_at left for Supabase to fill; conversation_id skipped for now
+- Debugged three separate blockers in sequence: stale .env.local (empty, then wrong URL with /rest/v1/ suffix baked in), a stale dev server process holding port 3000 with old env values, RLS blocking anon inserts (added an anon INSERT policy on messages), and conversation_id NOT NULL constraint (dropped NOT NULL as a temporary stopgap)
+- Confirmed: message typed in browser now shows up as a row in Supabase Table Editor
+
+Known gaps to revisit: hardcoded assistant messages aren't persisted (only typed user messages are), conversation_id is nullable as a stopgap and should get NOT NULL back once real conversation rows exist, RLS insert policy on messages is fully open (`with check (true)`) and should be scoped once auth/conversations exist.
+
+Concepts locked: async/await, Promises, Supabase RLS policies, reading Postgres/Supabase error messages to find root cause
+
+---
+
+## STATUS
+
+| Block | Description | Status |
+|-------|-------------|--------|
+| Block 1 | Project scaffold, Supabase schema, env vars | Done |
+| Block 2 | Chat.tsx client component, wired into page | Done |
+| Block 3 | Hardcoded messages, .map(), useState send | Done |
+| Block 4 | Persist messages to Supabase | Done |
+| Next | Persist assistant messages + real conversation_id | Not started |

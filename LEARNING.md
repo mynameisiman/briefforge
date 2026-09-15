@@ -38,15 +38,15 @@ This project is how I lock in the fundamentals while shipping something real.
 
 ### JavaScript / TypeScript
 - [x] Functions and return values
-- [ ] Async / await
+- [x] Async / await
 - [x] TypeScript types as guardrails
-- [ ] Reading error messages
+- [x] Reading error messages
 
 ### React / UI
 - [x] Components and props
-- [ ] UI state (useState)
-- [ ] Forms and controlled inputs
-- [ ] Client vs server components
+- [x] UI state (useState)
+- [x] Forms and controlled inputs
+- [x] Client vs server components
 
 ### Backend / Full-stack
 - [ ] API requests
@@ -73,5 +73,34 @@ This project is how I lock in the fundamentals while shipping something real.
   TypeScript vs React vs Next.js, metadata, env variables, SQL basics
 - **Session 2:** git fundamentals — repo, commit, push, the three states,
   remotes, README/Markdown
+- **Session 3:** useState, controlled inputs, client vs server boundary
+- **Session 4:** async/await and Promises, Supabase RLS policies, reading
+  Postgres/Supabase error messages to trace a bug to its root cause
+  (stale env file, stale dev server process, missing RLS policy, NOT NULL
+  constraint) instead of guessing
 
-**Currently:** foundations done. Next is the chat UI build (A-tier).
+**Currently:** chat UI persists user messages to Supabase. Next: persist
+assistant messages too, and give conversations a real conversation_id
+instead of the temporary nullable stopgap.
+
+## How Claude Should Teach Me (adapted to my learning model)
+
+Established Session 3, refined Session 4.
+
+1. **Map before detail.** Start every task with where it sits in the
+   project, what came before, what comes next. I need the frame before
+   the piece.
+2. **Teach the model, not the keystrokes.** In the AI era the durable
+   skills are system thinking, decision-making, debugging, and code
+   judgment — not syntax recall. For new code, Claude provides complete
+   working code and walks me through the *why* of each architectural
+   choice. I read it with understanding, ask questions, and delegate
+   typing when I want to. We skip cosmetic drilling. Energy goes to
+   choice moments: where state lives, server vs client, sync vs async,
+   error shape, data shape, security boundaries.
+3. **Teach the reusable procedure, not just the instance.** Whenever we
+   do something, give me the general mental chain for "this kind of
+   task," not only the BriefForge-specific answer.
+4. **Tell me what success looks like.** What I should see on screen so
+   I can verify myself.
+5. **End concept moments with a one-line "write this down."**
