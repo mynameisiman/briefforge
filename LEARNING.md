@@ -49,8 +49,8 @@ This project is how I lock in the fundamentals while shipping something real.
 - [x] Client vs server components
 
 ### Backend / Full-stack
-- [ ] API requests
-- [ ] Server-side vs client-side code
+- [x] API requests
+- [x] Server-side vs client-side code
 - [ ] Streaming responses
 - [x] Environment variables
 
@@ -78,9 +78,18 @@ This project is how I lock in the fundamentals while shipping something real.
   Postgres/Supabase error messages to trace a bug to its root cause
   (stale env file, stale dev server process, missing RLS policy, NOT NULL
   constraint) instead of guessing
+- **Session 5:** built a Next.js API route (route.ts) that calls the
+  Anthropic SDK server-side, keeping the API key off the client; called
+  that route with fetch from a client component and rendered the JSON
+  reply as a new chat bubble; read an Anthropic response object to pull
+  out the text block; re-diagnosed the Session 4 Supabase URL bug when
+  it resurfaced, instead of assuming it was something new
 
-**Currently:** chat UI persists user messages to Supabase. Next: persist
-assistant messages too, and give conversations a real conversation_id
+**Currently:** chat UI shows a real Haiku-generated reply after each user
+message, but nothing about that reply is smart yet (placeholder
+instruction, no system prompt) and it isn't saved to Supabase. Next:
+design and wire the real system prompt (Discover → Clarify → Extract
+phases), then persist assistant messages with a real conversation_id
 instead of the temporary nullable stopgap.
 
 ## How Claude Should Teach Me (adapted to my learning model)

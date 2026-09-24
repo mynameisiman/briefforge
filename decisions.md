@@ -85,6 +85,18 @@ Concepts locked: async/await, Promises, Supabase RLS policies, reading Postgres/
 
 ---
 
+## Session 5 — Wire Real AI Reply (Haiku)
+Date: 2026-09-22
+
+- Created app/api/chat/route.ts — POST handler calls Anthropic Haiku (claude-haiku-4-5-20251001) with a placeholder one-line instruction ("ask one short follow-up question"); no real system prompt yet
+- Chat.tsx now calls that route after the user sends a message and renders the reply as a new assistant bubble
+- Kept minimal on purpose: no streaming, no real system prompt, assistant messages not yet saved to Supabase
+- Fixed the same NEXT_PUBLIC_SUPABASE_URL `/rest/v1/` bug from Session 4 — it had reappeared and broke message saving again ("Invalid path specified in request URL"). Flag: if this exact error shows up again, check this env var value first before re-debugging from scratch.
+
+Concepts locked: API routes (route.ts handlers), fetch from a client component, reading an Anthropic SDK response shape (content[0].text)
+
+---
+
 ## STATUS
 
 | Block | Description | Status |
@@ -93,4 +105,5 @@ Concepts locked: async/await, Promises, Supabase RLS policies, reading Postgres/
 | Block 2 | Chat.tsx client component, wired into page | Done |
 | Block 3 | Hardcoded messages, .map(), useState send | Done |
 | Block 4 | Persist messages to Supabase | Done |
-| Next | Persist assistant messages + real conversation_id | Not started |
+| Block 5 | Wire Haiku via /api/chat, render reply as assistant bubble | Done |
+| Next | Design + wire real system prompt (Discover → Clarify → Extract phases) | Not started |

@@ -40,6 +40,18 @@ export default function Chat() {
     if (error) {
       console.error('Failed to save message:', error.message);
     }
+
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: newMessage.content }),
+    });
+    const { reply } = await res.json();
+
+    setMessages((prev) => [
+      ...prev,
+      { id: prev.length + 1, role: 'assistant', content: reply },
+    ]);
   }
 
   return (
