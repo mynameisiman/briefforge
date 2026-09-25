@@ -87,6 +87,9 @@ This project is how I lock in the fundamentals while shipping something real.
 - **Session 6:** fixed the conversation-history bug (stateless API calls,
   resending full message array each request), removed stale demo data,
   verified multi-turn memory working end-to-end
+- **Session 7:** recovered a lost Claude Code session from disk, built and
+  verified the real extraction call (JSON-only forced output via prefill),
+  confirmed the two-trigger system works in practice
 
 **Currently:** chat UI shows a real Haiku-generated reply after each user
 message, but nothing about that reply is smart yet (placeholder

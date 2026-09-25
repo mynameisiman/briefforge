@@ -11,8 +11,16 @@ type Message = {
   content: string;
 };
 
-function triggerExtraction() {
-  console.log('Ready to extract brief — placeholder, actual extraction not wired yet');
+async function triggerExtraction(history: Message[]) {
+  const res = await fetch('/api/extract', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      messages: history.map(({ role, content }) => ({ role, content })),
+    }),
+  });
+  const { brief } = await res.json();
+  console.log('Extracted brief:', brief);
 }
 
 export default function Chat() {
@@ -52,13 +60,16 @@ export default function Chat() {
     const isReady = reply.includes('[READY]');
     const displayReply = reply.replace(/\s*\[READY\]\s*$/, '');
 
-    setMessages((prev) => [
-      ...prev,
-      { id: prev.length + 1, role: 'assistant', content: displayReply },
-    ]);
+    const assistantMessage: Message = {
+      id: updatedMessages.length + 1,
+      role: 'assistant',
+      content: displayReply,
+    };
+    const finalMessages = [...updatedMessages, assistantMessage];
+    setMessages(finalMessages);
 
     if (isReady) {
-      triggerExtraction();
+      triggerExtraction(finalMessages);
     }
   }
 
@@ -101,7 +112,7 @@ export default function Chat() {
 
       {assistantCount >= 5 && (
         <button
-          onClick={triggerExtraction}
+          onClick={() => triggerExtraction(messages)}
           className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg text-sm self-center"
         >
           I feel done

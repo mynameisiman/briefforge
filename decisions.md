@@ -1,10 +1,10 @@
 # BriefForge — Decisions Log
 
 ## ▶ CURRENT STATUS — read this first
-Session: 6 done — conversation history fix shipped + verified
-Last done: Chat.tsx sends full messages array, route.ts forwards it to Haiku, hardcoded demo messages removed (empty initial state). Multi-turn context confirmed working in browser (target audience carried from msg 4 to final summary).
-Next action: decide + build the extraction trigger (when does the interview end and the brief-generation call fire — button vs detection vs fixed count)
-Then: Extract phase — one-off call sending full history + JSON-schema system prompt to Haiku
+Session: 7 done — extraction call built + verified end-to-end
+Last done: /api/extract/route.ts built (JSON-only Anthropic call, 8-field schema, JSON prefilled with { to force valid output), triggerExtraction in Chat.tsx wired to call it with full conversation history. Tested live: all 8 fields extracted correctly, no invented or missing values.
+Next action: decide what happens after extraction — save the brief to Supabase, and/or build the PDF + email step
+Then: brief review UI (show the visitor the extracted brief before sending)
 
 ---
 
@@ -132,3 +132,20 @@ Next session (A-tier): decide the extraction trigger, then build the one-off Ext
 | Block 4 | Persist messages to Supabase | Done |
 | Block 5 | Wire Haiku via /api/chat, render reply as assistant bubble | Done |
 | Next | Design + wire real system prompt (Discover → Clarify → Extract phases) | Not started |
+
+---
+
+## Session 7 — Extraction call built and verified
+Date: 2026-09-25
+
+- Recovered a lost Claude Code session (VS Code history bug) via the on-disk .jsonl transcript, confirmed prior work was already written but untested
+- Built app/api/extract/route.ts: real Anthropic call, JSON-only system prompt covering 8 fields (projectType, currentSiteLikes, currentSiteDislikes, visualDirection, targetAudience, mustHaveFeatures, timeline, budget), JSON forced via a prefilled "{" so Haiku can't preface the output with prose
+- Wired triggerExtraction in Chat.tsx to send full conversation history to /api/extract instead of the placeholder log
+- Verified live: 5-question button and full extraction both worked, all 8 fields matched the real conversation, no console/server errors
+- Noted, not fixed: Haiku's own [READY] marker didn't fire in this test run (kept asking follow-ups past 8 fields) — the "I feel done" button was the trigger that actually worked. System-prompt tuning question, not an extraction-code bug.
+
+Concepts locked: JSON-only output forcing via prefill, separate API routes per endpoint (api/extract vs api/chat), testing a two-trigger system in practice (one trigger can compensate when the other underperforms)
+
+Carried over: [READY] marker reliability untuned; no persistence or UI yet for the extracted brief
+
+Next session (A-tier): decide brief persistence (Supabase save) and/or PDF/email step
