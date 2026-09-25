@@ -3,7 +3,7 @@ import Anthropic from '@anthropic-ai/sdk';
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 export async function POST(request: Request) {
-  const { message } = await request.json();
+  const { messages } = await request.json();
 
   const response = await anthropic.messages.create({
     model: 'claude-haiku-4-5-20251001',
@@ -25,12 +25,7 @@ Then ask everyone the following, skipping anything already answered:
 - Their budget range — ask for it, but never suggest or estimate a price yourself
 
 Once you have clear answers to all of the above, stop asking questions and say you have enough to put together their brief.`,
-    messages: [
-      {
-        role: 'user',
-        content: message,
-      },
-    ],
+    messages,
   });
 
   const reply =

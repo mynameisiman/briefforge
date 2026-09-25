@@ -11,15 +11,8 @@ type Message = {
   content: string;
 };
 
-const initialMessages: Message[] = [
-  { id: 1, role: 'assistant', content: 'Hi! What is the name of your event?' },
-  { id: 2, role: 'user', content: 'TechSummit 2026.' },
-  { id: 3, role: 'assistant', content: 'Got it. How many guests are you expecting?' },
-  { id: 4, role: 'user', content: 'Around 200 people.' },
-];
-
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
 
   async function addMessage() {
@@ -30,7 +23,8 @@ export default function Chat() {
       role: 'user',
       content: input,
     };
-    setMessages([...messages, newMessage]);
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
     setInput('');
 
     const { error } = await supabase
@@ -44,7 +38,9 @@ export default function Chat() {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: newMessage.content }),
+      body: JSON.stringify({
+        messages: updatedMessages.map(({ role, content }) => ({ role, content })),
+      }),
     });
     const { reply } = await res.json();
 
