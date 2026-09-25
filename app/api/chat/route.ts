@@ -24,7 +24,9 @@ Then ask everyone the following, skipping anything already answered:
 - Their deadline or timeline
 - Their budget range — ask for it, but never suggest or estimate a price yourself
 
-Once you have clear answers to all of the above, stop asking questions and say you have enough to put together their brief.`,
+Once you have clear answers to all of the above, stop asking questions and say you have enough to put together their brief.
+
+When you have no more questions to ask, end your reply with the exact text [READY] on its own, at the very end. Do not mention this tag to the visitor.`,
     messages,
   });
 

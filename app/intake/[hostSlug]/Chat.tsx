@@ -11,9 +11,14 @@ type Message = {
   content: string;
 };
 
+function triggerExtraction() {
+  console.log('Ready to extract brief — placeholder, actual extraction not wired yet');
+}
+
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const assistantCount = messages.filter((m) => m.role === 'assistant').length;
 
   async function addMessage() {
     if (!input.trim()) return;
@@ -44,10 +49,17 @@ export default function Chat() {
     });
     const { reply } = await res.json();
 
+    const isReady = reply.includes('[READY]');
+    const displayReply = reply.replace(/\s*\[READY\]\s*$/, '');
+
     setMessages((prev) => [
       ...prev,
-      { id: prev.length + 1, role: 'assistant', content: reply },
+      { id: prev.length + 1, role: 'assistant', content: displayReply },
     ]);
+
+    if (isReady) {
+      triggerExtraction();
+    }
   }
 
   return (
@@ -86,6 +98,15 @@ export default function Chat() {
           Send
         </button>
       </div>
+
+      {assistantCount >= 5 && (
+        <button
+          onClick={triggerExtraction}
+          className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg text-sm self-center"
+        >
+          I feel done
+        </button>
+      )}
     </div>
   );
 }
