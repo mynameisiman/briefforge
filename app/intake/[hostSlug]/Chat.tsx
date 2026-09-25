@@ -21,6 +21,14 @@ async function triggerExtraction(history: Message[]) {
   });
   const { brief } = await res.json();
   console.log('Extracted brief:', brief);
+
+  const { error } = await supabase
+    .from('briefs')
+    .insert({ conversation_id: null, host_id: null, structured_data: brief });
+
+  if (error) {
+    console.error('Failed to save brief:', error.message);
+  }
 }
 
 export default function Chat() {
