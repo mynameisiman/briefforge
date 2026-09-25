@@ -1,5 +1,13 @@
 # BriefForge — Decisions Log
 
+## ▶ CURRENT STATUS — read this first
+Session: 6 done — conversation history fix shipped + verified
+Last done: Chat.tsx sends full messages array, route.ts forwards it to Haiku, hardcoded demo messages removed (empty initial state). Multi-turn context confirmed working in browser (target audience carried from msg 4 to final summary).
+Next action: decide + build the extraction trigger (when does the interview end and the brief-generation call fire — button vs detection vs fixed count)
+Then: Extract phase — one-off call sending full history + JSON-schema system prompt to Haiku
+
+---
+
 ## Session 0 — Architecture Decisions
 Date: 2025-05-12
 
@@ -94,6 +102,23 @@ Date: 2026-09-22
 - Fixed the same NEXT_PUBLIC_SUPABASE_URL `/rest/v1/` bug from Session 4 — it had reappeared and broke message saving again ("Invalid path specified in request URL"). Flag: if this exact error shows up again, check this env var value first before re-debugging from scratch.
 
 Concepts locked: API routes (route.ts handlers), fetch from a client component, reading an Anthropic SDK response shape (content[0].text)
+
+---
+
+## Session 6 — Conversation history fix
+Date: 2026-09-25
+
+- Diagnosed the bug: /api/chat only sent the newest message, not the full conversation array, so Haiku had no memory across turns
+- Fixed Chat.tsx to send the full messages array instead of a single message
+- Fixed route.ts to accept and forward the full array to anthropic.messages.create
+- Removed the leftover hardcoded "TechSummit 2026" demo messages from Chat.tsx's initial state (now starts empty) since they would have polluted real conversation history
+- Verified in browser: multi-turn restaurant-website conversation correctly carried context (target audience, budget, timeline) across 8+ turns to a final summary
+
+Concepts locked: statelessness of LLM API calls, why full history must be resent every call, call-pattern difference between repeated conversation calls and a one-off extraction call
+
+Carried over: extraction trigger design (when the interview ends and the brief-generation call fires) is still undecided
+
+Next session (A-tier): decide the extraction trigger, then build the one-off Extract call to Haiku
 
 ---
 

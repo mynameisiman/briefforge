@@ -84,6 +84,9 @@ This project is how I lock in the fundamentals while shipping something real.
   reply as a new chat bubble; read an Anthropic response object to pull
   out the text block; re-diagnosed the Session 4 Supabase URL bug when
   it resurfaced, instead of assuming it was something new
+- **Session 6:** fixed the conversation-history bug (stateless API calls,
+  resending full message array each request), removed stale demo data,
+  verified multi-turn memory working end-to-end
 
 **Currently:** chat UI shows a real Haiku-generated reply after each user
 message, but nothing about that reply is smart yet (placeholder
