@@ -1,10 +1,10 @@
 # BriefForge — Decisions Log
 
 ## ▶ CURRENT STATUS — read this first
-Session: 7 done — extraction call built + verified end-to-end
-Last done: /api/extract/route.ts built (JSON-only Anthropic call, 8-field schema, JSON prefilled with { to force valid output), triggerExtraction in Chat.tsx wired to call it with full conversation history. Tested live: all 8 fields extracted correctly, no invented or missing values.
-Next action: decide what happens after extraction — save the brief to Supabase, and/or build the PDF + email step
-Then: brief review UI (show the visitor the extracted brief before sending)
+Session: 8 done — extracted brief now persists to Supabase
+Last done: triggerExtraction in Chat.tsx now inserts one row into briefs after extraction succeeds (structured_data = the 8-field JSON, conversation_id/host_id null stopgaps). Hit an RLS block on the first real insert, added an anon INSERT policy on briefs (same open shape as messages from Session 4). Verified working end-to-end.
+Next action: decide what comes after persistence — PDF generation, email step, or brief review UI
+Then: build whichever of those is chosen next
 
 ---
 
@@ -149,3 +149,21 @@ Concepts locked: JSON-only output forcing via prefill, separate API routes per e
 Carried over: [READY] marker reliability untuned; no persistence or UI yet for the extracted brief
 
 Next session (A-tier): decide brief persistence (Supabase save) and/or PDF/email step
+
+---
+
+## Session 8 — Persist extracted brief to Supabase
+Date: 2026-09-25
+
+- Checked the live briefs table schema before writing any code (id, conversation_id, host_id, structured_data, pdf_url, emailed_at, created_at) — confirmed structured_data holds all 8 extracted fields as one JSON object, no 1:1 column mapping
+- Confirmed conversation_id has no real value anywhere in the app yet (same stopgap as messages.conversation_id from Session 4) — inserted as null, along with host_id, for now
+- Added a Supabase insert to triggerExtraction in Chat.tsx, right after the /api/extract fetch resolves — one row into briefs per extraction, structured_data set to the parsed brief. pdf_url/emailed_at left out of the insert entirely. Extraction logic itself (route.ts) and UI were not touched, per scope.
+- Hit RLS block on the first real insert: "new row violates row-level security policy for table 'briefs'" — same wall messages hit in Session 4
+- Added an anon INSERT policy on briefs (with check (true)), same fully-open shape as the messages policy — applied manually via Supabase SQL Editor (no migration file in the repo, no service-role key/CLI access to apply it directly)
+- Verified working end-to-end: a row now lands in briefs after "I feel done"
+
+Concepts locked: RLS blocks all writes by default until a policy grants them; check-only INSERT policies (with check (true)) as the minimal unblock; storing extracted structured data as JSON in one column vs mapping to individual columns
+
+Carried over: same RLS-scoping flag as messages — briefs INSERT policy is fully open and should be scoped once auth/conversations exist; conversation_id/host_id still null stopgaps; no persistence yet for pdf_url/emailed_at
+
+Next session (A-tier): decide what comes after persistence — PDF generation, email step, or brief review UI
