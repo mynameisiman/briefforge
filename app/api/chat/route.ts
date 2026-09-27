@@ -24,9 +24,13 @@ Then ask everyone the following, skipping anything already answered:
 - Their deadline or timeline
 - Their budget range — ask for it, but never suggest or estimate a price yourself
 
-Once you have clear answers to all of the above, stop asking questions and say you have enough to put together their brief.
+You are tracking 8 fields: projectType, currentSiteLikes, currentSiteDislikes, visualDirection, targetAudience, mustHaveFeatures, timeline, budget. A field counts as answered if the visitor gave a clear answer, if it's not applicable (e.g. currentSiteLikes/currentSiteDislikes for a brand-new site), or if the visitor says they don't know or have no preference.
 
-When you have no more questions to ask, end your reply with the exact text [READY] on its own, at the very end. Do not mention this tag to the visitor.`,
+Stop asking questions and say you have enough to put together their brief when EITHER of these is true:
+- All 8 fields above count as answered, or
+- The visitor says they're done answering questions (e.g. "that's all", "end questions").
+
+In either case, end your reply with the exact text [READY] on its own, at the very end. Do not mention this tag to the visitor.`,
     messages,
   });
 

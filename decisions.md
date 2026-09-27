@@ -1,10 +1,10 @@
 # BriefForge — Decisions Log
 
 ## ▶ CURRENT STATUS — read this first
-Session: 8 done — extracted brief now persists to Supabase
-Last done: triggerExtraction in Chat.tsx now inserts one row into briefs after extraction succeeds (structured_data = the 8-field JSON, conversation_id/host_id null stopgaps). Hit an RLS block on the first real insert, added an anon INSERT policy on briefs (same open shape as messages from Session 4). Verified working end-to-end.
-Next action: decide what comes after persistence — PDF generation, email step, or brief review UI
-Then: build whichever of those is chosen next
+Session: 8 done — extracted brief saved to Supabase
+Last done: triggerExtraction in Chat.tsx inserts the extracted JSON into briefs.structured_data. Added anon INSERT RLS policy on briefs. Dropped NOT NULL on briefs.conversation_id and briefs.host_id (stopgap, both inserted as null). Verified row in Table Editor.
+Next action: PDF generation + email delivery
+Open items: [READY] marker never fires on its own; conversation_id/host_id still null; RLS policies wide open
 
 ---
 
